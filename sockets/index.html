@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Setup -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Telemetry Dashboard</title>
+
+  <!-- Information -->
+  <meta name="author" content="MWR_Telemetry: Hyun-seok, Benton, Nicholas, Daniel">
+  <meta name="description" content="Telemetry Dashboard">
+  <meta name="keywords" content="telemetry, rockets, west high school, madison west rocket club">
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="./assets/favicon/site.webmanifest">
+  <link rel="mask-icon" href="./assets/favicon/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="./assets/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="./assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Init CSS -->
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">
+  <link rel="stylesheet" href="./dependancies/css/leaflet.css"/>
+  <link rel="stylesheet" type="text/css" href="dependancies/css/epoch.css">
+  <link rel="stylesheet" type="text/css" href="./dependancies/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="Style.css" type="text/css">
+  
+  <!-- Javascript Init Prerequisites -->
+  <script type="text/javascript" src="./dependancies/js/reconnecting-websocket.min.js"></script>
+  <script type="text/javascript" src="./dependancies/js/three.min.js"></script>
+  <script type="text/javascript" src="./dependancies/js/OrbitControls.js"></script>
+  <script type="text/javascript" src="./dependancies/js/WebGL.js"></script>
+  <script type="text/javascript" src="./dependancies/js/TextGeometry.js"></script>
+  <script type="text/javascript" src="./dependancies/js/OBJLoader.js"></script>
+  <script type="text/javascript" src="./dependancies/js/MTLLoader.js"></script>
+  <script type="text/javascript" src="./dependancies/js/smoothie.js"></script>
+  <script type="text/javascript" src="./dependancies/js/leaflet.js"></script>
+  <link rel="stylesheet" href="./dependancies/css/odometer.css" />
+  <script src="./dependancies/js/odometer.min.js"></script>
+
+  <script type="text/javascript" src="dependancies/js/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="dependancies/js/d3.v3.min.js" charset="utf-8"></script>
+  <script type="text/javascript" src="dependancies/js/epoch.js"></script>
+  <script type="text/javascript" src="./dependancies/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="./dependancies/js/popper.min.js"></script>
+
+</head>
+
+<body>
+  <script type="text/javascript" src="datacollection.js"></script>
+  <!-- The Actual Body -->
+  <div>
+  <div class="3dDisplay" id="board_render"></div>
+  <div class="container-fluid" style="z-index: 1;">
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-6">
+        <!-- altitude-->
+
+      </div>
+      <div class="col-md-3">
+      </div>
+    </div>
+
+  <div class="row h-75">
+    <div class="col-md-3">
+      <div class="row">
+        <div class="col-md-12">
+
+          <!-- temp graph -->
+          <div align="center">
+            temp graph
+          </div>
+          <div class="chart" id="graph_temp">
+            <canvas class="smoothie-chart" id="chart_temp"  width="443" height="20vh"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+
+          <!-- humidity graph-->
+          <div align="center">
+            humidity
+          </div>
+          <div class="chart" id="graph_humid">
+            <canvas class="smoothie-chart" id="chart_humid" width="443" height="200"></canvas>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 ">
+
+          <!-- pressure graph-->
+          <div align="center">
+            pressure
+          </div>
+          <div class="chart" id="graph_pressure">
+            <canvas class="smoothie-chart" id="chart_pressure"  width="443" height="200"></canvas>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 ">
+
+          <!-- Rocket Render-->
+          <div align="center">
+            rocket_render
+          </div>
+        <div id="rocket-render-div">
+          <div class="rocket-render" id="rocket_render"></div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6" id="mainCol">
+      <div class="row">
+        <div class="col-md-12">
+          <div align="center">
+            <<div id="altitude_od"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="navball-div fixed-bottom">
+          <div id="navball" class="fixed-bottom text-center"></div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="row">
+        <div class="col-md-12">
+          <div align="center">
+            accel vs time
+          </div>
+
+          <div class="chart" id="graph_accel">
+              <canvas class="smoothie-chart" id="chart_accel" width="443" height="200"></canvas>
+            </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div align="center">
+            gyro
+          </div>
+
+          <div class="chart" id="graph_gyro_all">
+              <canvas class="smoothie-chart" id="chart_gyro_all" width="443" height="200"></canvas>
+            </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div align="center">
+            magno
+          </div>
+          <div class="chart" id="graph_mag_all">
+              <canvas class="smoothie-chart" id="chart_mag_all" width="443" height="200"></canvas>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 ">
+
+          <!-- Map-->
+          <div align="center">
+            Map
+          </div>
+          <div id="map-div">
+            <div class="map" id="map" style="height:25vh"></div>
+          </div>
+
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+
+
+
+  <script type="text/javascript" src="renderboard.js"></script>
+  <script type="text/javascript" src="navball.js"></script>
+  <script type="text/javascript" src="map.js"></script>
+  <script type="text/javascript" src="renderrocket.js"></script>
+  <script type="text/javascript" src="odometer.js"></script>
+  <script type="text/javascript" src="charts.js"></script>
+
+</body>
+
+</html>

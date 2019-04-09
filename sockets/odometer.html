@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <link rel="stylesheet" href="./dependancies/css/odometer.css" />
+    <script src="./dependancies/js/odometer.min.js"></script>
+    <script src="./dependancies/js/jquery-3.3.1.min.js"></script>
+
+    <style>
+      .odometer.odometer-auto-theme, .odometer.odometer-theme-plaza{
+        font-size: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="altitude_od" class="odometer">600</div>
+    <script>
+      od_alt = new Odometer({
+        el:$('#altitude_od')[0],
+        value:600,
+        format:'(,ddd).dd'
+      });
+      setInterval(function() {
+        od_alt.update(Math.random()*5000);
+      }, 100);
+    </script>
+  </body>
+</html>

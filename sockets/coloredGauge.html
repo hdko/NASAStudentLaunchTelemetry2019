@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<!--  Epoch code starts here   -->
+<html>
+    <head>
+        <script type="text/javascript" src="dependancies/js/smoothie.js"></script>
+        <link rel="stylesheet" type="text/css" href="Style.css">
+        <script type="text/javascript" src="charts.js"></script>
+
+        <!--  Epoch prereqs   -->
+        <script src="dependancies/js/jquery-1.10.1.min.js"></script>
+        <script src="dependancies/js/d3.v3.min.js" charset="utf-8"></script>
+        <script src="dependancies/js/epoch.js"></script>
+        <link rel="stylesheet" type="text/css" href="dependancies/css/epoch.css">
+
+        <script>
+            var nextTime = (function() {
+                var currentTime = parseInt(new Date().getTime() / 1000);
+                return function() { return currentTime++; }
+            })();
+        </script>
+
+    </head>
+    <body onload="createTimeline()">
+        <!--<div id="gaugeChart" class="epoch gauge-large"></div>-->
+        
+        <style>
+            body {
+                font-family: helvetica;
+            }
+
+            /* Default test chart height of 220px. */
+            .chart .epoch {
+                height: 220px;
+            }
+
+            .broken {
+                color: red;
+            }
+        </style>
+
+        <!-- prereq for maps-->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="./dependancies/css/leaflet.css"/>
+        <script src="./dependancies/js/leaflet.js"></script>
+    
+    </head>
+    <body>
+        
+        <div id="mapid" style="width: 600px; height: 400px;"></div>
+            <script>
+
+                var mymap = L.map('mapid',{attributionControl: false}).fitWorld();
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                    maxZoom: 18,
+                    id: 'mapbox.streets'
+                }).addTo(mymap);
+
+            </script>-->
+       
+        <h2>Altimeter</h2>
+        <div id="gaugeChart" class="epoch gauge-large" style = "background-color: purple"></div>
+        <style>
+            #gaugeChart .epoch .gauge .arc.outer {
+                stroke-width: 8px;
+                stroke: #e5e9f0;
+            }
+            #gaugeChart .epoch .gauge .arc.inner {
+                stroke-width: 2px;
+                stroke: #e5e9f0;   
+            }
+            #gaugeChart .epoch .gauge .tick {
+                stroke-width: 3px;
+                stroke: #e5e9f0;
+            }
+            #gaugeChart .epoch .gauge .needle {
+                fill: #86c0d1;
+            }
+            #gaugeChart .epoch .gauge .needle-base {
+                fill: #86c0d1;
+            } 
+
+            /*
+            color does not work fix please 
+            */ 
+            #guageChart .epoch .gauge{
+                font-family: "Arial Black", Gadget, sans-serif;
+                font-size: 12pt;
+                color: #e5e9f0;
+            }
+            </style>
+         <script>
+            var gauge = $('#gaugeChart').epoch({
+                        type: 'time.gauge',
+                        fps: 60,
+                        domain: [0, 2100],
+                        format: function(v) { return (v).toFixed(2) + " ft" ; }
+                        });
+    
+        </script>
+
+     
+    </body>
+</html>
+
+<pre id="log"></pre>
+<script type="text/javascript" src="dependancies/js/reconnecting-websocket.min.js"></script>
+<script>
+  // helper function: log message to screen
+  function log(msg) {
+    document.getElementById('log').textContent += msg + '\n';
+  }
+
+  // setup websocket with callbacks
+  var ws = new ReconnectingWebSocket('ws://localhost:8080/');
+  var values = {}
+  var parsed
+  var chart = {};
+
+  ws.onopen = function() {
+    log('CONNECT');
+  };
+  ws.onclose = function() {
+    log('DISCONNECT');
+  };
+  ws.onmessage = function(event) {
+    parsed = event.data.split(',');
+
+    if(parsed[0]=="$$"){
+        mymap.setZoom(12);
+        mymap.panTo({lon: parsed[14], lat: parsed[12]});
+        console.log(parsed[14]);
+        console.log(parsed[12]);
+        //4 latitude, 5 longitude
+    }
+    
+    if(parsed[0]=="!!"){
+        // Altitude
+         gauge.push(parsed[5] * 3.2808);
+    }
+
+    //if(parsed[0]=='%%'){
+    //  line.push(parsed[1]);
+    //}
+
+
+    log('MESSAGE: ' + parsed);
+  };
+</script>

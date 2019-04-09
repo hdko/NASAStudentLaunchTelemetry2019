@@ -1,0 +1,44 @@
+<!--Acceleration vs time  -->
+              <div class="chart" id="graph_accel">
+                  <canvas id="chart_accel" width="800" height="200"></canvas>
+                </div>            
+       
+            <!--accel X -->
+            <div id="gauge_accelx" class="epoch gauge-small"></div>
+          
+            <!--accel Y -->
+              <div id="gauge_accely" class="epoch gauge-small"></div>
+         
+            <!--accel Z -->
+            <div id="gauge_accelz" class="epoch gauge-small"></div>
+
+        <!-- Board Render-->
+          <div class="3dDisplay" id="board_render">
+           </div>
+   
+            <!-- temp graph-->
+            <div class="chart" id="graph_temp">
+                <canvas id="chart_temp" width="800" height="200"></canvas>
+              </div>
+        
+             <!-- humidity graph-->
+             <div class="chart" id="graph_humid">
+                <canvas id="chart_humid" width="800" height="200"></canvas>
+          
+        <!-- map -->
+        <div id="map" style="width: 600px; height: 400px;"></div>
+   
+        <!-- nav ball-->
+        <div class="3dDisplay" id="navball">
+            <img id="indicator" src="./dependancies/models/indicator.png" />
+          </div>
+    
+            <!-- co2 graph-->
+            <div class="chart" id="graph_co2">
+                <canvas id="chart_co2" width="800" height="200"></canvas>
+              </div>
+         
+             <!-- TVOC graph-->
+             <div class="chart" id="graph_tvoc">
+                <canvas id="chart_tvoc" width="800" height="200"></canvas>
+              </div>
